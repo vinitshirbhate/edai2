@@ -1,5 +1,4 @@
 import React from "react";
-//import DashBoard from "./DashBoard";
 
 const MainFrame = () => {
   return (
@@ -8,16 +7,16 @@ const MainFrame = () => {
         Weather API
       </div>
       <div class=" h-52 m-5 p-3 grid gap-6 grid-cols-4">
-        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2">
+        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black">
           temprature
         </div>
-        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2">
+        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black">
           soil moisture
         </div>
-        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2">
+        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black">
           Humidity
         </div>
-        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2">
+        <div className=" rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black">
           Naya kuch invent karo
         </div>
       </div>

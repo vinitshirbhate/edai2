@@ -1,20 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 export const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className=" border bg-gray-400 p-4 backdrop-filter backdrop-blur-md bg-opacity-0 h-[95vh] w-72 rounded-3xl mt-5 ml-3">
         <div className="flex">
-          <div className=" bg-slate-300 rounded-full h-12 w-12 flex justify-center mt-1 mr-3">
-            <div className="flex flex-col justify-center h-full text-xl font-bold">
+          <div className=" bg-slate-200 rounded-full h-12 w-12 flex justify-center mt-1 mr-3">
+            <div className="flex flex-col justify-center h-full text-xl font-bold text-slate-500">
               V
             </div>
           </div>
-          <div className=" mt-3 flex flex-col justify-center text-2xl h-full font-medium mr-3.5">
+          <div className=" mt-3 flex flex-col justify-center text-2xl h-full font-medium mr-3.5 text-black">
             Vinit Shirbhate
           </div>
         </div>
-        <div class="w-full h-px bg-white opacity-30 mt-3"></div>
+        <div class="w-full h-px bg-white opacity-90 mt-3"></div>
+        {/* <div className="divider"></div> */}
+
 
         <div className="flex flex-col justify-center pt-6 space-y-4">
           {/* <button className=" text-lg capitalize underline">Home</button> */}
@@ -37,7 +40,7 @@ export const Sidebar = () => {
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
               />
             </svg>
-            <button class="ms-3">Dashboard</button>
+            <button onClick={navigate("/dashboard")} class="ms-3">Dashboard</button>
           </a>
           <a
             href="#"
@@ -63,7 +66,7 @@ export const Sidebar = () => {
               />
             </svg>
 
-            <button class="ms-3">Compatibility</button>
+            <button onClick={navigate("/compatiblity")} class="ms-3">Compatibility</button>
           </a>
           <a
             href="#"
