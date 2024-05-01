@@ -1,6 +1,6 @@
 import React, { useState }from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../firebase";
+import { app } from "/EDAI_2/edai2/frontend/";
 
 const auth = getAuth(app);
 const Login = () => {
