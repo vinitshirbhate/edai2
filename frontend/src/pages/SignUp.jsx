@@ -79,6 +79,9 @@ function Signup() {
               <span className="text-base label-text">Confirm Password</span>
             </label>
             <input
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+              }}
               type="password"
               placeholder="Confirm Password"
               className="w-full input input-bordered h-10"
