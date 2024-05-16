@@ -1,8 +1,6 @@
 import React from "react";
-import { Sidebar } from "../components/Sidebar";
-import Dashboard from "./dashboard";
 import CompatFrame from "./compatFrame";
-import MainFrame from "../components/MainFrame";
+import Sidebar from "../components/Sidebar";
 const Compatibility = () => {
   return (
     <div className="grid grid-cols-12">
