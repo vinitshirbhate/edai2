@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { Navigate } from "react-router-dom";
+import { EspDataProvider } from "./pages/EspDataContext";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+      <EspDataProvider>
       <div className='p-4 h-screen flex items-center justify-center'>
       <Routes>
       <Route path='/login' element={ user ? <Navigate to="/dashboard"/> : <Login />} />
@@ -33,6 +35,7 @@ function App() {
       </Routes>
       <ToastContainer/>
       </div>
+      </EspDataProvider>
       </BrowserRouter>
     </>
 );

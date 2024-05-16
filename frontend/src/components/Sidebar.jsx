@@ -55,7 +55,7 @@ function Sidebar() {
             )}
           </div>
         </div>
-        <div class="w-full h-px bg-white opacity-90 mt-3"></div>
+        <div className="w-full h-px bg-white opacity-90 mt-3"></div>
         {/* <div className="divider"></div> */}
 
 

@@ -11,11 +11,8 @@ const firebaseConfig = {
     messagingSenderId: "318565585968",
     appId: "1:318565585968:web:a286f2503c24918b3fc9f5",
     measurementId: "G-VCQH2BTQFL",
-  };
+};
 
-  export const app = initializeApp(firebaseConfig);
-  
-  
-  export const auth = getAuth();
-  export const db = getFirestore(app)
-  export default app;
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth();
+export const db = getFirestore(app);
