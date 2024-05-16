@@ -1,3 +1,4 @@
+
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -72,18 +73,19 @@ function Signup() {
 						/>
 					</div>
 
-					<div>
-						<label className='label'>
-							<span className='text-base label-text'>Confirm Password</span>
-						</label>
-						<input
-							type='password'
-							placeholder='Confirm Password'
-							className='w-full input input-bordered h-10'
-						/>
-					</div>
 
-					{/* <GenderCheckbox /> */}
+          <div>
+            <label className="label">
+              <span className="text-base label-text">Confirm Password</span>
+            </label>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="w-full input input-bordered h-10"
+            />
+          </div>
+
+          {/* <GenderCheckbox /> */}
 
 					<a className='text-sm hover:underline hover:text-blue-600 mt-2 inline-block' href='/login'>
 						Already have an account?
@@ -93,13 +95,14 @@ function Signup() {
                     <button type="submit" class="text-black bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-semibold rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">SignUp</button>
 					</div>
                     {/* <div>
+
 						<button className='btn btn-block btn-sm mt-2 border border-slate-700' >
 							SignUp
 						</button>
 					</div> */}
-				</form>
-			</div>
-		</div>
-	);
+        </form>
+      </div>
+    </div>
+  );
 };
 export default Signup;
