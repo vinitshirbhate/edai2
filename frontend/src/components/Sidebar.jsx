@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";  
+import { auth, db } from "../../firebase";
 
-function Sidebar() {
+const Sidebar = () => {
   const [userDetails, setUserDetails] = useState(null);
-  const fetchUserData = async() => {
-    auth.onAuthStateChanged(async(user) =>{
+  const fetchUserData = async () => {
+    auth.onAuthStateChanged(async (user) => {
       console.log(user);
-      const docRef= doc(db, "Users", user.uid);
-      const docSnap= await getDoc(docRef);
-      if(docSnap.exists()){
+      const docRef = doc(db, "Users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
         setUserDetails(docSnap.data());
         console.log(docSnap.data());
-      }else{
+      } else {
         console.log("User is not Logged In");
       }
     });
   };
-  useEffect(()=> {
-    fetchUserData()
-  },[])
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   async function handleLogout() {
     try {
@@ -38,18 +38,20 @@ function Sidebar() {
         <div className="flex">
           <div className=" bg-slate-200 rounded-full h-12 w-12 flex justify-center mt-1 mr-3">
             <div className="flex flex-col justify-center h-full text-xl font-bold text-slate-500">
-            {userDetails ? (
-              <>
-              <h3> {userDetails.fullname.substring(0,1)}</h3></>
-            ) : (
-              <p></p>
-            )}
+              {userDetails ? (
+                <>
+                  <h3> {userDetails.fullname.substring(0, 1)}</h3>
+                </>
+              ) : (
+                <p></p>
+              )}
             </div>
           </div>
           <div className=" mt-3 flex flex-col justify-center text-2xl h-full font-medium mr-3.5 text-black">
             {userDetails ? (
               <>
-              <h3>{userDetails.fullname}</h3></>
+                <h3>{userDetails.fullname}</h3>
+              </>
             ) : (
               <p>Loading...</p>
             )}
@@ -57,8 +59,6 @@ function Sidebar() {
         </div>
         <div className="w-full h-px bg-white opacity-90 mt-3"></div>
         {/* <div className="divider"></div> */}
-
-
         <div className="flex flex-col justify-center pt-6 space-y-4">
           {/* <button className=" text-lg capitalize underline">Home</button> */}
           {/* <button className="text-xl font-semibold underline">Home</button> */}
@@ -80,7 +80,9 @@ function Sidebar() {
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
               />
             </svg>
-            <button onClick={Navigate("/dashboard")} class="ms-3">Dashboard</button>
+            <button onClick={Navigate("/dashboard")} class="ms-3">
+              Dashboard
+            </button>
           </a>
           <a
             href="#"
@@ -106,13 +108,15 @@ function Sidebar() {
               />
             </svg>
 
-            <button onClick={Navigate("/compatiblity")} class="ms-3">Compatibility</button>
+            <button onClick={Navigate("/compatiblity")} class="ms-3">
+              Compatibility
+            </button>
           </a>
           <a
             href="#"
             className="flex items-center p-3 text-xl font-medium rounded-lg group dark:text-black hover:bg-green-700 hover:bg-opacity-40"
           >
-            <a className="tooltip" data-tip="Stats">
+            <a>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -150,8 +154,10 @@ function Sidebar() {
                 />
               </svg>
             </a>
-            <button class="ms-3" onClick={handleLogout}>Logout</button>
-            </a>
+            <button class="ms-3" onClick={handleLogout}>
+              Logout
+            </button>
+          </a>
         </div>
       </div>
     </>

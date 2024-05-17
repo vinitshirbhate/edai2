@@ -1,4 +1,4 @@
-import { BrowserRouter,Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Main } from "./pages/main";
 import Dashboard from "./pages/dashboard";
 import Compatibility from "./pages/compatibility";
@@ -38,7 +38,7 @@ function App() {
       </EspDataProvider>
       </BrowserRouter>
     </>
-);
+  );
 }
 
 export default App;
