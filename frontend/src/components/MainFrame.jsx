@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useEspData } from "../pages/EspDataContext";
 import Weather from "./weather";
+import { Area, AreaChart, LineChart } from "recharts";
+import { AreaChartComponent } from "./Chart";
 
 const MainFrame = () => {
   const espData = useEspData();
-  if (espData.length === 0) {
+  if (!espData) { // Check if espData is null
     console.log("no data");
-  } else {
-    var { Humidity, SoilMoisture, Temperature } = espData[0];
-    console.log(Humidity);
+    return <div>No data available</div>;
   }
 
+  const { Humidity, SoilMoisture, Temperature } = espData;
   // Calculate soil moisture percentage
   const calculateMoisture =
     espData.length === 0 ? null : ((1024 - SoilMoisture) / 1024) * 100;
@@ -154,8 +155,51 @@ const MainFrame = () => {
           <div className="text-xl font-semibold mt-2">Humidity</div>
         </div>
       </div>
+      <main className="h-full m-5 p-3 grid gap-6 grid-cols-3">
+        <div className="rounded-md h-full w-full shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center overflow-hidden">
+          <GridItem title="Temperature">
+            <AreaChartComponent 
+              data={espData}
+              dataKey="Temperature"
+              color="#4CAF50"
+              title="Temperature"
+            />
+          </GridItem>
+        </div>
+        <div className="rounded-md h-full w-full shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center overflow-hidden">
+          <GridItem title="Soil Moisture">
+            <AreaChartComponent
+              data={espData}
+              dataKey="Soil Moisture"
+              color="#4CAF50"
+              title="Soil Moisture"
+            />
+          </GridItem>
+        </div>
+        <div className="rounded-md h-full w-full shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center overflow-hidden">
+          <GridItem title="Humidity">
+            <AreaChartComponent 
+              data={espData}
+              dataKey="Humidity"
+              color="#4CAF50"
+              title="Humidity"
+            />
+          </GridItem>
+        </div>
+      </main>
     </>
   );
 };
+
+function GridItem({ title, children }) {
+  return (
+    <div className="flex flex-col items-center justify-center p-4 border border-slate-900 bg-slate-900/50 rounded-xl h-[400px] w-full">
+      <h3 className="text-1xl font-semibold text-white mb-4">{title}</h3>
+      <div className="w-full h-full flex items-center justify-center">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default MainFrame;

@@ -5,12 +5,16 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { Alert } from "@mui/material";
 
 
 function Signup() {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [fullname, setfullname] = useState("")
+	const [isAlert, setIsAlert] = useState(false)
+	const [alertType,setAlertType]=useState("");
+	const [alertMessage,setAlertMessage]=useState("");
 
 	const handleRegister= async (e)=>{
 		e.preventDefault();
@@ -26,14 +30,15 @@ function Signup() {
 				})
 			}
 			console.log("User is Registered Successfully");
-			toast.success("User Registered Successfully", {
-				position: "top-center"
-			})
+			setAlertMessage("User Signup Successful");
+			setAlertType("success");
+			setIsAlert(true);
+			
 		} catch (error) {
 			console.log(error.message);
-			toast.success(error.message, {
-				position: "top-right"
-			})
+			setAlertMessage("Invalid Login Credentials");
+			setAlertType("error");
+			setIsAlert(true);
 		}
 	}
 
@@ -103,6 +108,12 @@ function Signup() {
 							SignUp
 						</button>
 					</div> */}
+					{isAlert && <Alert sx={{
+						margin:"10px"
+					}} severity={alertType} onClose={() => {setIsAlert(false) }}>
+						{alertMessage}.
+					</Alert>}
+
         </form>
       </div>
     </div>

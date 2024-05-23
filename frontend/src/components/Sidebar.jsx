@@ -26,9 +26,21 @@ const Sidebar = () => {
 
   async function handleLogout() {
     try {
+      console.log("Initiating sign-out process...");
       await auth.signOut();
-      window.location.href = "/login";
-      console.log("User logged out successfully!");
+      console.log("Sign-out promise resolved");
+  
+      const user = auth.currentUser;
+      if (!user) {
+        console.log("User logged out successfully!");
+        
+        // Adding a short delay to ensure logs are flushed before redirection
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      } else {
+        console.error("User still logged in:", user);
+      }
     } catch (error) {
       console.error("Error logging out:", error.message);
     }
