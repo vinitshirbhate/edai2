@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { Navigate } from "react-router-dom";
 import { EspDataProvider } from "./pages/EspDataContext";
+import AreaChartComponent from "./components/Chart";
+import { Chart } from "react-chartjs-2";
 
 function App() {
 

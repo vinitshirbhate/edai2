@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useEspData } from "../pages/EspDataContext";
+import { EspDataProvider, useEspData } from "../pages/EspDataContext";
 import Weather from "./weather";
+import { Area, AreaChart, LineChart } from "recharts";
+import { AreaChartComponent } from "./Chart";
 
 const MainFrame = () => {
   const espData = useEspData();
-  if (espData.length === 0) {
+
+  if (!espData || espData.length === 0) { // Check if espData is null
     console.log("no data");
-  } else {
-    var { Humidity, SoilMoisture, Temperature } = espData[0];
-    console.log(Humidity);
+    return <div>No data available</div>;
   }
+
+  const latestData = espData.find(data => data.name === getTodayName()); // Get today's data
+
+  // Destructure the latest sensor reading
+  const { temperature, humidity, soilMoisture } = latestData || {};
 
   // Calculate soil moisture percentage
   const calculateMoisture =
-    espData.length === 0 ? null : ((1024 - SoilMoisture) / 1024) * 100;
+    espData.length === 0 ? null : ((1024 - soilMoisture) / 1024) * 100;
+
 
   const [city, setCity] = useState(null);
 
@@ -83,7 +90,11 @@ const MainFrame = () => {
             </g>
           </svg>
           <div className="text-4xl font-bold">
-            {espData.length === 0 ? "Loading..." : `${Temperature}°C`}
+          <SensorValue
+          value={temperature}
+          unit="°C"
+          title="Temperature"
+        />
           </div>
           <div className="text-xl font-semibold mt-2">Temperature</div>
         </div>
@@ -109,9 +120,11 @@ const MainFrame = () => {
           </svg>
 
           <div className="text-4xl font-bold">
-            {espData.length === 0
-              ? "Loading..."
-              : `${calculateMoisture.toFixed(2)}%`}
+          <SensorValue
+          value={calculateMoisture}
+          unit="%"
+          title="Soil Moisture"
+        />
           </div>
           <div className="text-xl font-semibold mt-2">Soil Moisture</div>
         </div>
@@ -149,13 +162,77 @@ const MainFrame = () => {
             </g>
           </svg>
           <div className="text-4xl font-bold">
-            {espData.length === 0 ? "Loading..." : `${Humidity}%`}
+          <SensorValue
+          value={humidity}
+          unit="%"
+          title="Humidity"
+        />
           </div>
           <div className="text-xl font-semibold mt-2">Humidity</div>
         </div>
       </div>
+      <main className="h-full m-5 p-3 grid gap-6 grid-cols-3">
+        <div className="rounded-md h-full w-full shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center overflow-hidden">
+        <GridItem title="Temperature">
+            <AreaChartComponent 
+              data={espData}
+              dataKey="temperature"
+              color="#4CAF50"
+              title="Temperature"
+            />
+          </GridItem>
+        </div>
+        <div className="rounded-md h-full w-full shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center overflow-hidden">
+          <GridItem title="Soil Moisture">
+            <AreaChartComponent
+              data={espData}
+              dataKey="soilMoisture"
+              color="#4CAF50"
+              title="Soil Moisture"
+            />
+          </GridItem>
+        </div>
+        <div className="rounded-md h-full w-full shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center overflow-hidden">
+          <GridItem title="Humidity">
+            <AreaChartComponent 
+              data={espData}
+              dataKey="humidity"
+              color="#4CAF50"
+              title="Humidity"
+            />
+          </GridItem>
+        </div>
+      </main>
     </>
   );
 };
+
+const SensorValue = ({ value, unit }) => {
+  return (
+    <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+      <div className="text-4xl font-bold">
+        {value === undefined ? "Loading..." : `${value}${unit}`}
+      </div>
+      <div className="text-xl font-semibold mt-2">{unit}</div>
+    </div>
+  );
+};
+const getTodayName = () => {
+  const today = new Date();
+  const dayIndex = today.getDay();
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  return days[dayIndex];
+};
+
+function GridItem({ title, children }) {
+  return (
+    <div className="flex flex-col items-center justify-center p-4 border border-slate-900 bg-slate-900/50 rounded-xl h-[400px] w-full">
+      <h3 className="text-1xl font-semibold text-white mb-4">{title}</h3>
+      <div className="w-full h-full flex items-center justify-center">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default MainFrame;
