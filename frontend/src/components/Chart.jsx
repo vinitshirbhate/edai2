@@ -1,5 +1,4 @@
-'use client';
-
+import React from 'react';
 import {
     AreaChart,
     Area,
@@ -8,61 +7,32 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
-  } from 'recharts';
-  
+} from 'recharts';
+import { useEspData } from '/EDAI_2/edai2/frontend/src/pages/EspDataContext';
 
-const productSales = [
-    {
-      name: 'Jan',
-      product1: 4000,
-      product2: 2400,
-    },
-    {
-      name: 'Feb',
-      product1: 3000,
-      product2: 2210,
-    },
-    {
-      name: 'Mar',
-      product1: 2000,
-      product2: 2290,
-    },
-    {
-      name: 'Apr',
-      product1: 2780,
-      product2: 2000,
-    },
-    {
-      name: 'May',
-      product1: 1890,
-      product2: 2181,
-    },
-    {
-      name: 'Jun',
-      product1: 2390,
-      product2: 2500,
-    },
-  ];
-  export const AreaChartComponent = () => {
+export const AreaChartComponent = ({ dataKey, stroke, fill }) => {
+    const espData = useEspData();
+    
+    if (!espData || espData.length === 0) {
+        return <div>No data available</div>;
+    }
+
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <AreaChart width={500} height={400} data={productSales}>
+        <ResponsiveContainer width="100%" height={400}>
+            <AreaChart width={500} height={400} data={espData}>
                 <CartesianGrid strokeDasharray="5 5" />
                 <XAxis dataKey="name" />
-                {/* <YAxis /> */}
+                <YAxis />
                 <Tooltip />
-                {/* <Legend /> */}
                 <Area
                     type="monotone"
-                    dataKey="product1"
-                    stroke='#2563eb'
-                    fill="#3b82f6"
+                    dataKey={dataKey}
+                    stroke={stroke}
+                    fill={fill}
                 />
             </AreaChart>
         </ResponsiveContainer>
     );
 };
-
 
 export default AreaChartComponent;

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getFirestore, collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { app } from '../../firebase';
 
 const EspDataContext = createContext();
@@ -16,20 +16,35 @@ export const EspDataProvider = ({ children }) => {
         const fetchData = async () => {
             const colRef = collection(db, 'EspData');
             try {
-                // Query the collection and order the documents by creation time in descending order
-                const q = query(colRef, orderBy('CreateTime', 'desc'), limit(1));
+                const oneWeekAgo = getOneWeekAgoDateString();
+                const q = query(colRef, orderBy('CreateTime', 'desc'), where('CreateTime', '>=', oneWeekAgo));
                 const snapshot = await getDocs(q);
+
+                const dataByDay = {};
+
+                snapshot.docs.forEach(doc => {
+                    const docData = doc.data();
+                    docData.CreateTime = convertStringToDate(docData.CreateTime);
+                    const dayKey = docData.CreateTime.toISOString().slice(0, 10); // Use date as key
+                    if (!dataByDay[dayKey] || docData.CreateTime > dataByDay[dayKey].CreateTime) {
+                        dataByDay[dayKey] = {
+                            CreateTime: docData.CreateTime,
+                            temperature: docData.Temperature,
+                            humidity: docData.Humidity,
+                            soilMoisture: docData.SoilMoisture
+                        };
+                    }
+                });
+
+                const data = Object.values(dataByDay).map(entry => ({
+                    name: entry.CreateTime.toLocaleDateString('en-US', { weekday: 'short' }),
+                    temperature: entry.temperature,
+                    humidity: entry.humidity,
+                    soilMoisture: entry.soilMoisture
+                })).reverse(); // Reverse to show oldest first
                 
-                // Check if there are any documents returned
-                if (!snapshot.empty) {
-                    // Get the latest document's data
-                    const latestDocData = snapshot.docs[0].data();
-                    latestDocData.CreateTime = convertStringToDate(latestDocData.CreateTime);
-                    setEspData(() => latestDocData);
-                    console.log(latestDocData);
-                } else {
-                    console.log("No documents found in the collection.");
-                }
+                setEspData(data);
+                console.log(data);
             } catch (err) {
                 console.error("Error fetching data:", err);
             }
@@ -38,8 +53,7 @@ export const EspDataProvider = ({ children }) => {
         fetchData();
     }, [db]);
 
-     // Helper function to convert yyyymmddhhmmss to Date
-     const convertStringToDate = (dateString) => {
+    const convertStringToDate = (dateString) => {
         const year = parseInt(dateString.substring(0, 4));
         const month = parseInt(dateString.substring(4, 6)) - 1; // Months are 0-indexed
         const day = parseInt(dateString.substring(6, 8));
@@ -48,6 +62,12 @@ export const EspDataProvider = ({ children }) => {
         const second = parseInt(dateString.substring(12, 14));
 
         return new Date(year, month, day, hour, minute, second);
+    };
+
+    const getOneWeekAgoDateString = () => {
+        const date = new Date();
+        date.setDate(date.getDate() - 7);
+        return date.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14); // Convert to yyyymmddhhmmss format
     };
 
     return (
