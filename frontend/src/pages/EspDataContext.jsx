@@ -26,7 +26,17 @@ export const EspDataProvider = ({ children }) => {
                     const docData = doc.data();
                     docData.CreateTime = convertStringToDate(docData.CreateTime);
                     const dayKey = docData.CreateTime.toISOString().slice(0, 10); // Use date as key
-                    if (!dataByDay[dayKey] || docData.CreateTime > dataByDay[dayKey].CreateTime) {
+                    
+                    if (!dataByDay[dayKey]) {
+                        // If no entry exists for this day, add the new entry
+                        dataByDay[dayKey] = {
+                            CreateTime: docData.CreateTime,
+                            temperature: docData.Temperature,
+                            humidity: docData.Humidity,
+                            soilMoisture: docData.SoilMoisture
+                        };
+                    } else if (isSameDay(dataByDay[dayKey].CreateTime, docData.CreateTime)) {
+                        // If an entry exists for this day and it's the same day as the new entry, update it
                         dataByDay[dayKey] = {
                             CreateTime: docData.CreateTime,
                             temperature: docData.Temperature,
@@ -68,6 +78,15 @@ export const EspDataProvider = ({ children }) => {
         const date = new Date();
         date.setDate(date.getDate() - 7);
         return date.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14); // Convert to yyyymmddhhmmss format
+    };
+
+    // Function to check if two dates are on the same day
+    const isSameDay = (date1, date2) => {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
     };
 
     return (
