@@ -9,7 +9,6 @@ import { auth } from "../firebase";
 import { Navigate } from "react-router-dom";
 import { EspDataProvider } from "./pages/EspDataContext";
 import AreaChartComponent from "./components/Chart";
-import { Chart } from "react-chartjs-2";
 import Compatibility from "./pages/compatibility";
 
 function App() {
@@ -35,7 +34,7 @@ function App() {
                 <Route path="/" element={<Dashboard />}></Route>
                 <Route path="/dashboard" element={<Dashboard />}></Route>
               </Route>
-              <Route path="/compatiblity" element={<Compatibility />}></Route>
+              <Route path="/compatibility" element={<Compatibility />}></Route>
             </Routes>
             <ToastContainer />
           </div>
