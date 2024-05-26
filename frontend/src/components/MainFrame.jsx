@@ -21,7 +21,9 @@ const MainFrame = () => {
 
   // Calculate soil moisture percentage
   const calculateMoisture =
-    espData.length === 0 ? null : ((1024 - soilMoisture) / 1024) * 100;
+    espData.length === 0
+      ? null
+      : (((1024 - soilMoisture) / 1024) * 100).toFixed(2);
 
   const [city, setCity] = useState(null);
 
@@ -127,7 +129,7 @@ const MainFrame = () => {
   );
 };
 
-const SensorValue = ({ value, unit }) => {
+export const SensorValue = ({ value, unit }) => {
   return (
     <>
       <div className="text-4xl font-bold">
@@ -136,7 +138,7 @@ const SensorValue = ({ value, unit }) => {
     </>
   );
 };
-const getTodayName = () => {
+export const getTodayName = () => {
   const today = new Date();
   const dayIndex = today.getDay();
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
