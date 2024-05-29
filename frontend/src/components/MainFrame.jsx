@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { EspDataProvider, useEspData } from "../pages/EspDataContext";
 import Weather from "./weather";
-import { Area, AreaChart, LineChart } from "recharts";
 import { AreaChartComponent } from "./Chart";
 
 const MainFrame = () => {
   const espData = useEspData();
-  // Call useEspData hook next
 
   if (!espData || espData.length === 0) {
-    // Check if espData is null
     console.log("no data");
     return <div>No data available</div>;
   }
 
-  const latestData = espData.find((data) => data.name === getTodayName()); // Get today's data
+  const todayName = getTodayName();
+  const latestData = espData.find((data) => data.name === todayName); // Get today's data
 
-  // Destructure the latest sensor reading
   const { temperature, humidity, soilMoisture } = latestData || {};
 
-  // Calculate soil moisture percentage
   const calculateMoisture =
     espData.length === 0
       ? null
@@ -131,13 +127,12 @@ const MainFrame = () => {
 
 export const SensorValue = ({ value, unit }) => {
   return (
-    <>
-      <div className="text-4xl font-bold">
-        {value === undefined ? "Loading..." : `${value}${unit}`}
-      </div>
-    </>
+    <div className="text-4xl font-bold">
+      {value === undefined ? "Loading..." : `${value}${unit}`}
+    </div>
   );
 };
+
 export const getTodayName = () => {
   const today = new Date();
   const dayIndex = today.getDay();
@@ -147,7 +142,7 @@ export const getTodayName = () => {
 
 function GridItem({ title, children }) {
   return (
-    <div className="flex flex-col items-center justify-center pr-6 rounded-xl  w-full">
+    <div className="flex flex-col items-center justify-center pr-6 rounded-xl w-full">
       <h3 className="text-2xl font-bold text-black mb-4">{title}</h3>
       <div className="w-full h-full flex items-center justify-center">
         {children}
