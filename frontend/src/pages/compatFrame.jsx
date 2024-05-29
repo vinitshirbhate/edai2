@@ -3,6 +3,7 @@ import { useFirebase, FirebaseProvider } from "../../firebase";
 import BookCard from "../components/Card";
 import { SensorValue, getTodayName } from "../components/MainFrame";
 import { useEspData } from "./EspDataContext";
+import ModalComp from "../components/ModalComp";
 
 const CropCategory = ({ title, crops }) => {
   const scrollRef = useRef(null);
@@ -31,7 +32,7 @@ const CropCategory = ({ title, crops }) => {
   return (
     <>
       <div
-        className="relative m-6 gap-2 "
+        className="relative m-6 gap-2"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -45,7 +46,6 @@ const CropCategory = ({ title, crops }) => {
               >
                 ❮
               </button>
-
               <button
                 onClick={scrollRight}
                 className="btn btn-outline btn-success btn-circle absolute right-0 z-40"
@@ -64,7 +64,7 @@ const CropCategory = ({ title, crops }) => {
           </div>
         </div>
       </div>
-      <div className=" divider relative"></div>
+      <div className="divider relative"></div>
     </>
   );
 };
@@ -72,30 +72,70 @@ const CropCategory = ({ title, crops }) => {
 const CompatFrame = () => {
   const firebase = useFirebase();
   const [crops, setCrops] = useState({ farm: [], cashCrops: [], indoor: [] });
+  const [open, setOpen] = useState(false);
+  const [suitableCrops, setSuitableCrops] = useState({
+    farm: [],
+    cashCrops: [],
+    indoor: [],
+  });
 
   useEffect(() => {
     firebase.listAllPlants().then((cropsData) => setCrops(cropsData));
   }, [firebase]);
 
   const espData = useEspData();
-  // Call useEspData hook next
 
   if (!espData || espData.length === 0) {
-    // Check if espData is null
     console.log("no data");
     return <div>No data available</div>;
   }
 
-  const latestData = espData.find((data) => data.name === getTodayName()); // Get today's data
+  const latestData = espData.find((data) => data.name === getTodayName());
 
-  // Destructure the latest sensor reading
   const { temperature, humidity, soilMoisture } = latestData || {};
 
-  // Calculate soil moisture percentage
   const calculateMoisture =
     espData.length === 0
       ? null
       : (((1024 - soilMoisture) / 1024) * 100).toFixed(2);
+
+  const filterSuitableCrops = () => {
+    const suitableCrops = {
+      farm: [],
+      cashCrops: [],
+      indoor: [],
+    };
+
+    Object.keys(crops).forEach((category) => {
+      crops[category].forEach((crop) => {
+        const data = crop.data();
+        if (
+          data.itemp !== undefined &&
+          data.ftemp !== undefined &&
+          data.ihumidity !== undefined &&
+          data.fhumidity !== undefined &&
+          data.isoilmoisture !== undefined &&
+          data.fsoilmoisture !== undefined &&
+          data.itemp <= temperature &&
+          data.ftemp >= temperature &&
+          data.ihumidity <= humidity &&
+          data.fhumidity >= humidity &&
+          data.isoilmoisture <= calculateMoisture &&
+          data.fsoilmoisture >= calculateMoisture
+        ) {
+          suitableCrops[category].push(crop);
+        }
+      });
+    });
+
+    return suitableCrops;
+  };
+
+  const handleModal = () => {
+    const suitable = filterSuitableCrops();
+    setSuitableCrops(suitable);
+    setOpen(true);
+  };
 
   return (
     <>
@@ -118,7 +158,6 @@ const CompatFrame = () => {
               alt="temprature"
               className="h-16 w-16"
             />
-
             <div className="text-4xl font-bold">
               <SensorValue
                 value={calculateMoisture}
@@ -140,12 +179,17 @@ const CompatFrame = () => {
             <div className="text-xl font-semibold mt-2">Humidity</div>
           </div>
         </div>
-        <div className=" flex place-items-center justify-center">
-          <button className=" text-2xl text-black font-bold btn btn-success w-full mx-24">
-            {" "}
-            Find Plants you can grow in this enviroments{" "}
+        <div className="flex place-items-center justify-center">
+          <button
+            className="text-2xl text-black font-bold btn btn-success w-full mx-24"
+            onClick={handleModal}
+          >
+            Find Plants you can grow in this environment
           </button>
         </div>
+        {open && (
+          <ModalComp open={open} setOpen={setOpen} suitableCrops={suitableCrops} />
+        )}
         <div className="overflow-hidden flex flex-col">
           {[
             { title: "Farm Crops", crops: crops.farm },
