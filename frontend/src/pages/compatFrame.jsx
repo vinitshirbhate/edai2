@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useFirebase, FirebaseProvider } from "../../firebase";
 import BookCard from "../components/Card";
-import { SensorValue, getTodayName } from "../components/MainFrame";
+import { SensorValue } from "../components/MainFrame";
 import { useEspData } from "./EspDataContext";
 import ModalComp from "../components/ModalComp";
 
@@ -84,20 +84,19 @@ const CompatFrame = () => {
   }, [firebase]);
 
   const espData = useEspData();
-
   if (!espData || espData.length === 0) {
-    console.log("no data");
+    console.log("No data");
     return <div>No data available</div>;
   }
 
-  const latestData = espData.find((data) => data.name === getTodayName());
+  // Get the latest data entry
+  const latestData = espData[espData.length-1]; // Since the array is reversed, the first entry is the latest
 
+  console.log("Latest data in MainFrame:", latestData); // Debugging statement
   const { temperature, humidity, soilMoisture } = latestData || {};
-
-  const calculateMoisture =
-    espData.length === 0
-      ? null
-      : (((1024 - soilMoisture) / 1024) * 100).toFixed(2);
+  const calculateMoisture = soilMoisture
+  ? (((1024 - soilMoisture) / 1024) * 100).toFixed(2)
+  : null;
 
   const filterSuitableCrops = () => {
     const suitableCrops = {
@@ -144,25 +143,24 @@ const CompatFrame = () => {
           <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
             <img
               src="/assets/temprature.svg"
-              alt="temprature"
+              alt="temperature"
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue value={temperature} unit="°C" title="Temperature" />
+              <SensorValue value={temperature} unit="°C"/>
             </div>
             <div className="text-xl font-semibold mt-2">Temperature</div>
           </div>
           <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
             <img
               src="/assets/humidity.svg"
-              alt="temprature"
+              alt="soil moisture"
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
               <SensorValue
                 value={calculateMoisture}
                 unit="%"
-                title="Soil Moisture"
               />
             </div>
             <div className="text-xl font-semibold mt-2">Soil Moisture</div>
@@ -170,11 +168,11 @@ const CompatFrame = () => {
           <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
             <img
               src="/assets/soilMoisture.svg"
-              alt="temprature"
+              alt="humidity"
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue value={humidity} unit="%" title="Humidity" />
+              <SensorValue value={humidity} unit="%"/>
             </div>
             <div className="text-xl font-semibold mt-2">Humidity</div>
           </div>

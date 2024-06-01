@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { EspDataProvider, useEspData } from "../pages/EspDataContext";
+import React, { useState, useEffect } from "react";
+import { useEspData } from "../pages/EspDataContext";
 import Weather from "./weather";
-import { AreaChartComponent } from "./Chart";
+import AreaChartComponent from "./Chart";
 
 const MainFrame = () => {
   const espData = useEspData();
+ // console.log("espData in MainFrame:", espData); // Debugging statement
 
   if (!espData || espData.length === 0) {
-    console.log("no data");
+    console.log("No data");
     return <div>No data available</div>;
   }
 
-  const todayName = getTodayName();
-  const latestData = espData.find((data) => data.name === todayName); // Get today's data
+  // Get the latest data entry
+  const latestData = espData[espData.length - 1]; // The last entry is the latest
 
+  console.log("Latest data in MainFrame:", latestData); // Debugging statement
   const { temperature, humidity, soilMoisture } = latestData || {};
 
-  const calculateMoisture =
-    espData.length === 0
-      ? null
-      : (((1024 - soilMoisture) / 1024) * 100).toFixed(2);
+  const calculateMoisture = soilMoisture
+    ? (((1024 - soilMoisture) / 1024) * 100).toFixed(2)
+    : null;
 
   const [city, setCity] = useState(null);
 
@@ -50,40 +51,32 @@ const MainFrame = () => {
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
           <img
             src="/assets/temprature.svg"
-            alt="temprature"
+            alt="temperature"
             className="h-16 w-16"
           />
           <div className="text-4xl font-bold">
             <SensorValue value={temperature} unit="°C" title="Temperature" />
           </div>
-          <div className="text-xl font-semibold mt-2">Temperature</div>
         </div>
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
           <img
             src="/assets/humidity.svg"
-            alt="temprature"
+            alt="humidity"
             className="h-16 w-16"
           />
-
           <div className="text-4xl font-bold">
-            <SensorValue
-              value={calculateMoisture}
-              unit="%"
-              title="Soil Moisture"
-            />
+            <SensorValue value={calculateMoisture} unit="%" title="Soil Moisture" />
           </div>
-          <div className="text-xl font-semibold mt-2">Soil Moisture</div>
         </div>
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
           <img
             src="/assets/soilMoisture.svg"
-            alt="temprature"
+            alt="humidity"
             className="h-16 w-16"
           />
           <div className="text-4xl font-bold">
             <SensorValue value={humidity} unit="%" title="Humidity" />
           </div>
-          <div className="text-xl font-semibold mt-2">Humidity</div>
         </div>
       </div>
 
@@ -91,10 +84,9 @@ const MainFrame = () => {
         <div className="rounded-md shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
           <GridItem title="Temperature">
             <AreaChartComponent
-              data={espData}
               dataKey="temperature"
-              color="#4CAF50"
-              title="Temperature"
+              stroke="#FF0000"
+              fill="#FF8888"
             />
           </GridItem>
         </div>
@@ -102,10 +94,9 @@ const MainFrame = () => {
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
           <GridItem title="Soil Moisture">
             <AreaChartComponent
-              data={espData}
               dataKey="soilMoisture"
-              color="#4CAF50"
-              title="Soil Moisture"
+              stroke="#0000FF"
+              fill="#8888FF"
             />
           </GridItem>
         </div>
@@ -113,10 +104,9 @@ const MainFrame = () => {
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
           <GridItem title="Humidity">
             <AreaChartComponent
-              data={espData}
               dataKey="humidity"
-              color="#4CAF50"
-              title="Humidity"
+              stroke="#00FF00"
+              fill="#88FF88"
             />
           </GridItem>
         </div>
@@ -125,22 +115,18 @@ const MainFrame = () => {
   );
 };
 
-export const SensorValue = ({ value, unit }) => {
+export const SensorValue = ({ value, unit, title }) => {
   return (
-    <div className="text-4xl font-bold">
-      {value === undefined ? "Loading..." : `${value}${unit}`}
+    <div className="text-center">
+      <div className="text-4xl font-bold">
+        {value === undefined ? "Loading..." : `${value}${unit}`}
+      </div>
+      <div className="text-xl font-semibold mt-2">{title}</div>
     </div>
   );
 };
 
-export const getTodayName = () => {
-  const today = new Date();
-  const dayIndex = today.getDay();
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  return days[dayIndex];
-};
-
-function GridItem({ title, children }) {
+const GridItem = ({ title, children }) => {
   return (
     <div className="flex flex-col items-center justify-center pr-6 rounded-xl w-full">
       <h3 className="text-2xl font-bold text-black mb-4">{title}</h3>
@@ -149,6 +135,6 @@ function GridItem({ title, children }) {
       </div>
     </div>
   );
-}
+};
 
 export default MainFrame;
