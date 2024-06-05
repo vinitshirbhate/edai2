@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getFirestore, collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import { app } from '../../firebase';
 
 const EspDataContext = createContext();
@@ -17,7 +17,8 @@ export const EspDataProvider = ({ children }) => {
             const colRef = collection(db, 'EspData');
             try {
                 const oneWeekAgo = getOneWeekAgoDateString();
-                const q = query(colRef, orderBy('CreateTime', 'desc'), where('CreateTime', '>=', oneWeekAgo));
+                console.log("Fetching data from:", oneWeekAgo);
+                const q = query(colRef, where('CreateTime', '>=', oneWeekAgo));
                 const snapshot = await getDocs(q);
 
                 const dataByDay = {};
@@ -26,34 +27,72 @@ export const EspDataProvider = ({ children }) => {
                     const docData = doc.data();
                     docData.CreateTime = convertStringToDate(docData.CreateTime);
                     const dayKey = docData.CreateTime.toISOString().slice(0, 10); // Use date as key
-                    
-                    // Update the entry if it's the latest for the day
-                    if (!dataByDay[dayKey] || dataByDay[dayKey].CreateTime < docData.CreateTime) {
-                        dataByDay[dayKey] = {
-                            CreateTime: docData.CreateTime,
-                            temperature: docData.Temperature,
-                            humidity: docData.Humidity,
-                            soilMoisture: docData.SoilMoisture
-                        };
+
+                    // Create an array for each day to hold multiple entries
+                    if (!dataByDay[dayKey]) {
+                        dataByDay[dayKey] = [];
                     }
+
+                    // Push each entry into the respective day's array
+                    dataByDay[dayKey].push({
+                        CreateTime: docData.CreateTime,
+                        temperature: docData.Temperature,
+                        humidity: docData.Humidity,
+                        soilMoisture: docData.SoilMoisture
+                    });
                 });
 
-                const data = Object.values(dataByDay).map(entry => ({
-                    name: entry.CreateTime.toLocaleDateString('en-US', { weekday: 'short' }),
-                    temperature: entry.temperature,
-                    humidity: entry.humidity,
-                    soilMoisture: entry.soilMoisture
-                })).reverse(); // Reverse to show oldest first
-                
+                // Process each day's data to get the latest entry
+                const data = Object.entries(dataByDay).map(([dayKey, entries]) => {
+                    const latestEntry = entries.reduce((latest, current) => {
+                        return current.CreateTime > latest.CreateTime ? current : latest;
+                    });
+
+                    return {
+                        name: latestEntry.CreateTime.toLocaleDateString('en-US', { weekday: 'short' }),
+                        temperature: latestEntry.temperature,
+                        humidity: latestEntry.humidity,
+                        soilMoisture: latestEntry.soilMoisture,
+                        CreateTime: latestEntry.CreateTime
+                    };
+                });
+
                 setEspData(data);
-                console.log(data);
+                console.log("Data fetched in EspDataProvider:", data);
             } catch (err) {
                 console.error("Error fetching data:", err);
             }
         };
-        
+
         fetchData();
+
+        // Schedule deletion of previous week's same day records more frequently for testing
+        const intervalId = setInterval(deleteOneWeekAgoData, getMillisecondsUntilNextDay());
+        deleteOneWeekAgoData(); // Call it immediately for testing
+
+        return () => clearInterval(intervalId); // Cleanup interval
     }, [db]);
+
+    const deleteOneWeekAgoData = async () => {
+        try {
+            const oneWeekAgo = getOneWeekAgoDateString();
+            const dayAfterOneWeekAgo = getDayAfterOneWeekAgoDateString();
+            console.log("Deleting data from:", oneWeekAgo, "to:", dayAfterOneWeekAgo);
+            const colRef = collection(db, 'EspData');
+            const q = query(colRef, where('CreateTime', '>=', oneWeekAgo), where('CreateTime', '<', dayAfterOneWeekAgo));
+            const snapshot = await getDocs(q);
+
+            const batch = writeBatch(db);
+            snapshot.docs.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+
+            await batch.commit();
+            console.log("One week ago's data deleted.");
+        } catch (err) {
+            console.error("Error deleting one week ago's data:", err);
+        }
+    };
 
     const convertStringToDate = (dateString) => {
         const year = parseInt(dateString.substring(0, 4));
@@ -69,7 +108,27 @@ export const EspDataProvider = ({ children }) => {
     const getOneWeekAgoDateString = () => {
         const date = new Date();
         date.setDate(date.getDate() - 7);
-        return date.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14); // Convert to yyyymmddhhmmss format
+        const oneWeekAgo = date.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
+        console.log("One week ago date string:", oneWeekAgo);
+        return oneWeekAgo; // Convert to yyyymmddhhmmss format
+    };
+
+    const getDayAfterOneWeekAgoDateString = () => {
+        const date = new Date();
+        date.setDate(date.getDate() - 6);
+        const dayAfterOneWeekAgo = date.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
+        console.log("Day after one week ago date string:", dayAfterOneWeekAgo);
+        return dayAfterOneWeekAgo; // Convert to yyyymmddhhmmss format
+    };
+
+    const getMillisecondsUntilNextDay = () => {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1); // Calculate next day
+        tomorrow.setHours(0, 0, 0, 0); // Set time to 00:00:00
+        const millisecondsUntilNextDay = tomorrow - now;
+        console.log("Milliseconds until next day:", millisecondsUntilNextDay);
+        return millisecondsUntilNextDay;
     };
 
     return (
