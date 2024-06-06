@@ -86,7 +86,15 @@ const CompatFrame = () => {
   const espData = useEspData();
   if (!espData || espData.length === 0) {
     console.log("No data");
-    return <div>No data available</div>;
+    return (
+      <div className="flex flex-col justify-center items-center bg-teal-500 h-full">
+        <img src="../../assets/WeatherIcons.gif" alt=" Loading..." />
+        <p className="text-3xl font-extrabold text-teal-900 flex flex-row gap-2">
+          Fetching Your Data From The Cloud
+          <span className="loading loading-dots loading-lg"></span>
+        </p>
+      </div>
+    );
   }
 
   // Get the latest data entry

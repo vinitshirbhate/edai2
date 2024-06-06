@@ -5,11 +5,18 @@ import AreaChartComponent from "./Chart";
 
 const MainFrame = () => {
   const espData = useEspData();
-  // console.log("espData in MainFrame:", espData); // Debugging statement
 
   if (!espData || espData.length === 0) {
     console.log("No data");
-    return <div>No data available</div>;
+    return (
+      <div className="flex flex-col justify-center items-center bg-teal-500 h-full">
+        <img src="../../assets/WeatherIcons.gif" alt=" Loading..." />
+        <p className="text-3xl font-extrabold text-teal-900 flex flex-row gap-2">
+          Fetching Your Data From The Cloud
+          <span className="loading loading-dots loading-lg"></span>
+        </p>
+      </div>
+    );
   }
 
   // Get the latest data entry
@@ -47,7 +54,21 @@ const MainFrame = () => {
   return (
     <>
       <div className="px-6">
-        {city ? <Weather city={city} /> : <p>Loading...</p>}
+        {city ? (
+          <Weather city={city} />
+        ) : (
+          <div className="bg-teal-700 h-36 rounded-2xl flex justify-center place-items-center gap-x-7">
+            <p className="text-xl font-semibold flex flex-row gap-2 text-teal-950">
+              Checking for permissions{" "}
+              <span className="loading loading-dots loading-md" />
+            </p>
+            <img
+              src="../../assets/WeatherIcons.gif"
+              alt=" Loading..."
+              className=" w-36 h-36"
+            />
+          </div>
+        )}
       </div>
       <div className="h-52 m-3 p-3 grid gap-6 grid-cols-3 flex-grow">
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
@@ -125,7 +146,11 @@ export const SensorValue = ({ value, unit, title }) => {
   return (
     <div className="text-center">
       <div className="text-4xl font-bold">
-        {value === undefined ? "Loading..." : `${value}${unit}`}
+        {value === undefined ? (
+          <span className="loading loading-infinity loading-lg"></span>
+        ) : (
+          `${value}${unit}`
+        )}
       </div>
       <div className="text-xl font-semibold mt-2">{title}</div>
     </div>

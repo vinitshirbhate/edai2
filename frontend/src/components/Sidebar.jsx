@@ -48,8 +48,8 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className=" border bg-green-100 p-3 h-[96vh] rounded-3xl flex-grow m-6 w-3/4">
-        <div className="flex space-x-96">
+      <div className=" border bg-green-100 p-3 h-[96vh] rounded-3xl flex-grow m-6 w-3/4 ">
+        <div className="flex justify-between">
           <div className="flex ">
             <div className=" bg-slate-800 rounded-full h-10 w-10 flex justify-center mt-2 mr-3 ml-6 ">
               <div className="flex flex-col justify-center h-full text-xl font-bold text-slate-300">
@@ -61,7 +61,7 @@ const Sidebar = () => {
                     </h3>
                   </>
                 ) : (
-                  <div className="skeleton w-12 h-12 rounded-full shrink-0 bg-white"></div>
+                  <div className="skeleton w-12 h-12 rounded-full shrink-0 bg-teal-700"></div>
                 )}
               </div>
             </div>
@@ -71,9 +71,9 @@ const Sidebar = () => {
                   <h3>{userDetails.fullname}</h3>
                 </>
               ) : (
-                <div className="flex flex-col gap-4">
-                  <div className="skeleton h-4 w-24 bg-white"></div>
-                  <div className="skeleton h-4 w-32 bg-white"></div>
+                <div className="flex flex-col gap-2">
+                  <div className="skeleton h-4 w-24 bg-teal-700"></div>
+                  <div className="skeleton h-4 w-32 bg-teal-700"></div>
                 </div>
               )}
             </div>
@@ -95,9 +95,9 @@ const Sidebar = () => {
               </button>
             </div>
           </div>
-          <div className="flex items-center p-1 text-xl font-medium rounded-lg group dark:text-black hover:bg-red-700 justify-center">
+          <div className="flex items-center p-1 text-xl font-medium rounded-lg group dark:text-black hover:bg-red-700 justify-center mr-5">
             <img src="/assets/logout.svg" alt="logout" className="w-6 h-6" />
-            <button className="ms-3" onClick={handleLogout}>
+            <button className="ms-3 " onClick={handleLogout}>
               Logout
             </button>
           </div>
