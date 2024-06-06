@@ -127,6 +127,7 @@ const Weather = ({ city }) => {
         "Foggy weather: Plants are feeling all mysterious and cool today!",
     },
   };
+
   const weatherCondition =
     weatherData.weather && weatherData.weather.length > 0
       ? weatherData.weather[0].main.toUpperCase()

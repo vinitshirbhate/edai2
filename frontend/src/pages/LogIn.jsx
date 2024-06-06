@@ -1,9 +1,8 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { Navigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
-import { toast } from "react-toastify";
-import { Alert } from "@mui/material";
+import { Alert, Button, TextField } from "@mui/material";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -28,52 +27,83 @@ function Login() {
       setIsAlert(true);
     }
   };
+
   return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3xl font-semibold text-center text-black">Login</h1>
+    <div className="signup-bg h-4/5 w-4/5 rounded-3xl grid grid-cols-4 bg-black">
+      <div className="p-6 col-span-1 font-md text-2xl text-white text-left flex-grow ">
+        Unlock the secrets of your soil. Sign up Now!
+      </div>
+      <>
+        <img
+          src="../../assets/edai_random.jpg"
+          alt=""
+          className="absolute w-1/5 mt-28 ml-12 h-3/5 place-content-center rounded-xl hidden md:block"
+        />
+      </>
+      <div className="p-6 col-span-3 bg-white rounded-3xl flex flex-col justify-center items-center flex-grow ">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-14">
+          Login
+        </h1>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Email</span>
-            </label>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex flex-col justify-center items-center text-black"
+        >
+          <div className="mb-4 w-1/2">
+            <TextField
+              id="email"
+              label="Email"
+              variant="outlined"
               type="email"
-              placeholder="Enter your email"
-              className="w-full input input-bordered h-10"
+              fullWidth
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="text-left"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "black" },
+                },
+              }}
             />
           </div>
 
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Password</span>
-            </label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
+          <div className="mb-4 w-1/2">
+            <TextField
+              id="password"
+              label="Password"
+              variant="outlined"
               type="password"
-              placeholder="Enter your Password"
-              className="w-full input input-bordered h-10"
+              fullWidth
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="text-left"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "black" },
+                },
+              }}
             />
           </div>
 
-          <a
-            href="/signup"
-            className="text-sm  hover:underline hover:text-blue-600 mt-2 inline-block"
+          <Link
+            className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block text-left"
+            to="/signup"
           >
-            {"Don't"} have an account?
-          </a>
+            Don't have an account? Sign up
+          </Link>
 
-          <div className="flex justify-center items-center mt-3">
-            <button
+          <div className="flex justify-center items-center mt-4">
+            <Button
               type="submit"
-              class="text-black bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-semibold rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              variant="contained"
+              sx={{
+                background: "linear-gradient(to right, #a8e063, #56ab2f)",
+                color: "black",
+                fontWeight: "bold",
+              }}
             >
               Login
-            </button>
+            </Button>
           </div>
 
           {isAlert && (
@@ -86,7 +116,7 @@ function Login() {
                 setIsAlert(false);
               }}
             >
-              {alertMessage}.
+              {alertMessage}
             </Alert>
           )}
         </form>

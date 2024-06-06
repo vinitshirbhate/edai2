@@ -2,26 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)),
     url("/background.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-}
+} */
 
-.weather {
+body {
   background-image: linear-gradient(
     to right bottom,
-    #00feba,
-    #00d8dd,
-    #00ade0,
-    #1e7fc1,
-    #5b548a
+    #283620,
+    #2f4026,
+    #374a2d,
+    #3e5433,
+    #465e3a,
+    #4b6540,
+    #506c45,
+    #55734b,
+    #597951,
+    #5d7e56,
+    #62845c,
+    #668a62
+  );
+  font-family: "Poppins", sans-serif;
+}
+.signup-bg {
+  background-image: linear-gradient(
+    to right bottom,
+    #214f14,
+    #376626,
+    #4d7f38,
+    #64984b,
+    #7cb25f
   );
 }
-
 /* dark mode looking scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

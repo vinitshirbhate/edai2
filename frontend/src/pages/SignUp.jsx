@@ -1,9 +1,9 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { Alert } from "@mui/material";
+import { Alert, Button, TextField } from "@mui/material";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -50,79 +50,112 @@ function Signup() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-800 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3xl font-semibold text-center text-gray-800">
+    <div className="signup-bg h-4/5 w-4/5 rounded-3xl grid grid-cols-4 bg-black ">
+      <div className=" p-8 col-span-1 font-md text-2xl text-white text-left">
+        Unlock the secrets of your soil. Sign up Now!
+      </div>
+      <>
+        <img
+          src="../../assets/edai_random.jpg"
+          alt=""
+          className=" absolute w-1/5 mt-28 ml-12 h-3/5 place-content-center rounded-xl"
+        />
+      </>
+      <div className=" p-6 col-span-3 bg-white rounded-3xl flex flex-col justify-center items-center flex-grow">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-14">
           Sign Up
         </h1>
 
-        <form onSubmit={handleRegister}>
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Full Name</span>
-            </label>
-            <input
-              type="text"
+        <form
+          onSubmit={handleRegister}
+          className=" w-full flex flex-col justify-center items-center text-black"
+        >
+          <div className="mb-4 w-1/2">
+            <TextField
+              id="fullname"
+              label="Full Name"
+              variant="outlined"
+              fullWidth
               onChange={(e) => setFullname(e.target.value)}
               required
-              placeholder="John Doe"
-              className="w-full input input-bordered  h-10"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "black" },
+                },
+              }}
             />
           </div>
 
-          <div>
-            <label className="label p-2 ">
-              <span className="text-base label-text">Email</span>
-            </label>
-            <input
+          <div className="mb-4 w-1/2">
+            <TextField
+              id="email"
+              label="Email"
+              variant="outlined"
               type="email"
+              fullWidth
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="johndoe@gmail.com"
-              className="w-full input input-bordered h-10"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "black" },
+                },
+              }}
             />
           </div>
 
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Password</span>
-            </label>
-            <input
+          <div className="mb-4 w-1/2">
+            <TextField
+              id="password"
+              label="Password"
+              variant="outlined"
               type="password"
+              fullWidth
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter Password"
-              className="w-full input input-bordered h-10"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "black" },
+                },
+              }}
             />
           </div>
 
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Confirm Password</span>
-            </label>
-            <input
-              onChange={(e) => setConfirmPassword(e.target.value)}
+          <div className="mb-4 w-1/2">
+            <TextField
+              id="confirm-password"
+              label="Confirm Password"
+              variant="outlined"
               type="password"
+              fullWidth
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              placeholder="Confirm Password"
-              className="w-full input input-bordered h-10"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "black" },
+                },
+              }}
             />
           </div>
 
-          <a
+          <Link
             className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block"
-            href="/login"
+            to="/login"
           >
             Already have an account?
-          </a>
+          </Link>
 
-          <div className="flex justify-center items-center mt-2">
-            <button
+          <div className="flex justify-center items-center mt-4">
+            <Button
               type="submit"
-              className="text-black bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-semibold rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              variant="contained"
+              sx={{
+                background: "linear-gradient(to right, #a8e063, #56ab2f)",
+                color: "black",
+                fontWeight: "bold",
+              }}
             >
-              SignUp
-            </button>
+              Sign Up
+            </Button>
           </div>
           {isAlert && (
             <Alert
@@ -134,7 +167,7 @@ function Signup() {
                 setIsAlert(false);
               }}
             >
-              {alertMessage}.
+              {alertMessage}
             </Alert>
           )}
         </form>
