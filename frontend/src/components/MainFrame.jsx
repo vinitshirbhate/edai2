@@ -5,7 +5,7 @@ import AreaChartComponent from "./Chart";
 
 const MainFrame = () => {
   const espData = useEspData();
- // console.log("espData in MainFrame:", espData); // Debugging statement
+  // console.log("espData in MainFrame:", espData); // Debugging statement
 
   if (!espData || espData.length === 0) {
     console.log("No data");
@@ -46,9 +46,11 @@ const MainFrame = () => {
 
   return (
     <>
-      {city ? <Weather city={city} /> : <p>Loading...</p>}
-      <div className="h-52 m-5 p-3 grid gap-6 grid-cols-3">
-        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+      <div className="px-6">
+        {city ? <Weather city={city} /> : <p>Loading...</p>}
+      </div>
+      <div className="h-52 m-3 p-3 grid gap-6 grid-cols-3 flex-grow">
+        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <img
             src="/assets/temprature.svg"
             alt="temperature"
@@ -58,17 +60,21 @@ const MainFrame = () => {
             <SensorValue value={temperature} unit="°C" title="Temperature" />
           </div>
         </div>
-        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <img
             src="/assets/humidity.svg"
             alt="humidity"
             className="h-16 w-16"
           />
           <div className="text-4xl font-bold">
-            <SensorValue value={calculateMoisture} unit="%" title="Soil Moisture" />
+            <SensorValue
+              value={calculateMoisture}
+              unit="%"
+              title="Soil Moisture"
+            />
           </div>
         </div>
-        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <img
             src="/assets/soilMoisture.svg"
             alt="humidity"
@@ -80,8 +86,8 @@ const MainFrame = () => {
         </div>
       </div>
 
-      <main className="h-52 m-5 p-3 grid gap-6 grid-cols-3">
-        <div className="rounded-md shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+      <main className="h-52 m-3 p-3 grid gap-6 grid-cols-3">
+        <div className="rounded-md shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <GridItem title="Temperature">
             <AreaChartComponent
               dataKey="temperature"
@@ -91,7 +97,7 @@ const MainFrame = () => {
           </GridItem>
         </div>
 
-        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <GridItem title="Soil Moisture">
             <AreaChartComponent
               dataKey="soilMoisture"
@@ -101,7 +107,7 @@ const MainFrame = () => {
           </GridItem>
         </div>
 
-        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
+        <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <GridItem title="Humidity">
             <AreaChartComponent
               dataKey="humidity"

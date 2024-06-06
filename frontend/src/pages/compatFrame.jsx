@@ -90,13 +90,13 @@ const CompatFrame = () => {
   }
 
   // Get the latest data entry
-  const latestData = espData[espData.length-1]; // Since the array is reversed, the first entry is the latest
+  const latestData = espData[espData.length - 1]; // Since the array is reversed, the first entry is the latest
 
   console.log("Latest data in MainFrame:", latestData); // Debugging statement
   const { temperature, humidity, soilMoisture } = latestData || {};
   const calculateMoisture = soilMoisture
-  ? (((1024 - soilMoisture) / 1024) * 100).toFixed(2)
-  : null;
+    ? (((1024 - soilMoisture) / 1024) * 100).toFixed(2)
+    : null;
 
   const filterSuitableCrops = () => {
     const suitableCrops = {
@@ -138,7 +138,7 @@ const CompatFrame = () => {
 
   return (
     <>
-      <div className="overflow-y-auto h-full">
+      <div className="overflow-y-auto ">
         <div className="h-52 m-5 p-3 grid gap-6 grid-cols-3">
           <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center">
             <img
@@ -147,7 +147,7 @@ const CompatFrame = () => {
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue value={temperature} unit="°C"/>
+              <SensorValue value={temperature} unit="°C" />
             </div>
             <div className="text-xl font-semibold mt-2">Temperature</div>
           </div>
@@ -158,10 +158,7 @@ const CompatFrame = () => {
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue
-                value={calculateMoisture}
-                unit="%"
-              />
+              <SensorValue value={calculateMoisture} unit="%" />
             </div>
             <div className="text-xl font-semibold mt-2">Soil Moisture</div>
           </div>
@@ -172,7 +169,7 @@ const CompatFrame = () => {
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue value={humidity} unit="%"/>
+              <SensorValue value={humidity} unit="%" />
             </div>
             <div className="text-xl font-semibold mt-2">Humidity</div>
           </div>
@@ -186,7 +183,11 @@ const CompatFrame = () => {
           </button>
         </div>
         {open && (
-          <ModalComp open={open} setOpen={setOpen} suitableCrops={suitableCrops} />
+          <ModalComp
+            open={open}
+            setOpen={setOpen}
+            suitableCrops={suitableCrops}
+          />
         )}
         <div className="overflow-hidden flex flex-col">
           {[
