@@ -35,7 +35,7 @@ function Login() {
       </div>
       <>
         <img
-          src="../../assets/edai_random.jpg"
+          src="../../assets/AuthPage.jpg"
           alt=""
           className="absolute top-2/3 w-1/5  ml-12 h-3/5 transform -translate-y-2/3 place-content-center rounded-xl hidden md:block"
         />

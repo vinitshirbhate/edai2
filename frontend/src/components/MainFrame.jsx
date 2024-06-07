@@ -19,10 +19,9 @@ const MainFrame = () => {
     );
   }
 
-  // Get the latest data entry
-  const latestData = espData[espData.length - 1]; // The last entry is the latest
+  const latestData = espData[espData.length - 1];
 
-  console.log("Latest data in MainFrame:", latestData); // Debugging statement
+  console.log("Latest data in MainFrame:", latestData);
   const { temperature, humidity, soilMoisture } = latestData || {};
 
   const calculateMoisture = soilMoisture
