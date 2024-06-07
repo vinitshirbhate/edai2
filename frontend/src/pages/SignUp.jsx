@@ -51,14 +51,14 @@ function Signup() {
 
   return (
     <div className="signup-bg h-4/5 w-4/5 rounded-3xl grid grid-cols-4 bg-black ">
-      <div className=" p-8 col-span-1 font-md text-2xl text-white text-left">
+      <div className=" p-8 col-span-1 font-md text-2xl text-white text-left flex-grow z-40 hidden md:block">
         Unlock the secrets of your soil. Sign up Now!
       </div>
       <>
         <img
-          src="../../assets/edai_random.jpg"
+          src="../../assets/AuthPage.jpg"
           alt=""
-          className=" absolute w-1/5 mt-28 ml-12 h-3/5 place-content-center rounded-xl"
+          className="absolute top-2/3 w-1/5  ml-12 h-3/5 transform -translate-y-2/3 place-content-center rounded-xl hidden md:block"
         />
       </>
       <div className=" p-6 col-span-3 bg-white rounded-3xl flex flex-col justify-center items-center flex-grow">
