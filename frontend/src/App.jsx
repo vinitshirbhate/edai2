@@ -8,17 +8,26 @@ import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { EspDataProvider } from "./pages/EspDataContext";
-import MainFrame from "./components/MainFrame";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      setIsLoading(false);
     });
     return () => unsubscribe();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-screen flex justify-center items-center">
+        <img src="../assets/WeatherIcons.gif" alt="Loading..." />
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
