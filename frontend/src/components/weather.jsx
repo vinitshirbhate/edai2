@@ -7,7 +7,7 @@ const Weather = ({ city }) => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const apiKey = "4582848adf00f1e4eead728b6001a422";
+        const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
         if (!apiKey) {
           throw new Error("API key is missing");
         }
@@ -83,7 +83,7 @@ const Weather = ({ city }) => {
     },
     RAIN: {
       icon: "RAIN",
-      color: "blue",
+      color: "gray",
       size: 94,
       animate: true,
       gradient: "from-sky-200 to-sky-700",
@@ -155,7 +155,8 @@ const Weather = ({ city }) => {
 
       <div className="flex flex-col items-end text-black font-bold text-4xl p-8">
         <div>{city}</div>
-        <div>{weatherData.main.temp}°C</div>
+        <div className="text-xl">{`Pressure: ${weatherData.main.pressure} hPa`}</div>
+
         <div className="text-xl">{`Wind: ${weatherData.wind.speed} m/s`}</div>
       </div>
     </div>
