@@ -32,7 +32,19 @@ const Weather = ({ city }) => {
   }, [city]);
 
   if (!weatherData) {
-    return <p>Loading...</p>;
+    return (
+      <div className="bg-teal-700 h-36 rounded-2xl flex justify-center place-items-center gap-x-7">
+        <p className="text-xl font-semibold flex flex-row gap-2 text-teal-950">
+          Checking for permissions{" "}
+          <span className="loading loading-dots loading-md" />
+        </p>
+        <img
+          src="../../assets/WeatherIcons.gif"
+          alt=" Loading..."
+          className=" w-36 h-36"
+        />
+      </div>
+    );
   }
 
   const weatherDefaults = {

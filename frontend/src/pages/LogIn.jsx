@@ -10,10 +10,11 @@ function Login() {
   const [isAlert, setIsAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Set to false initially
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state to true on form submit
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User Logged In Successfully");
@@ -21,12 +22,13 @@ function Login() {
       setAlertMessage("User Login Successful");
       setAlertType("success");
       setIsAlert(true);
-      setisLoading(false);
+      setIsLoading(false); // Set loading state to false after successful login
     } catch (error) {
       console.log(error.message);
       setAlertMessage("Invalid Login Credentials");
       setAlertType("error");
       setIsAlert(true);
+      setIsLoading(false); // Set loading state to false after error
     }
   };
 
@@ -39,10 +41,10 @@ function Login() {
         <img
           src="../../assets/AuthPage.jpg"
           alt=""
-          className="absolute top-2/3 w-1/5  ml-12 h-3/5 transform -translate-y-2/3 place-content-center rounded-xl hidden md:block"
+          className="absolute top-2/3 w-1/5 ml-12 h-3/5 transform -translate-y-2/3 place-content-center rounded-xl hidden md:block"
         />
       </>
-      <div className="p-6 col-span-3 bg-white rounded-3xl flex flex-col justify-center items-center flex-grow ">
+      <div className="p-6 col-span-3 bg-white rounded-3xl flex flex-col justify-center items-center flex-grow">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-14">
           Login
         </h1>
@@ -103,13 +105,14 @@ function Login() {
                 color: "black",
                 fontWeight: "bold",
               }}
+              disabled={isLoading} // Disable button during loading
             >
               {isLoading ? (
-                <p>Login</p>
-              ) : (
                 <div className="h-full w-full flex justify-center items-center">
                   <span className="loading loading-spinner loading-md"></span>
                 </div>
+              ) : (
+                <p>Login</p>
               )}
             </Button>
           </div>

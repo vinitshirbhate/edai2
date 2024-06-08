@@ -21,6 +21,13 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
+  if (isloading) {
+    return (
+      <div className="h-screen w-screen flex justify-center items-center">
+        <img src="../assets/WeatherIcons.gif" alt="Loading" />
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -36,6 +43,7 @@ function App() {
               path="/"
               element={user ? <Main /> : <Navigate to="/login" />}
             >
+              <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/compatibility" element={<Compatibility />} />
             </Route>

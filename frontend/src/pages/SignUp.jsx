@@ -13,11 +13,13 @@ function Signup() {
   const [isAlert, setIsAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (password !== confirmPassword) {
       setAlertMessage("Passwords do not match");
       setAlertType("error");
@@ -28,27 +30,25 @@ function Signup() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
-      console.log(user);
       if (user) {
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,
           fullname: fullname,
         });
       }
-      console.log("User is Registered Successfully");
       setAlertMessage("User Signup Successful");
       setAlertType("success");
+      setIsAlert(true);
       setTimeout(() => {
         setIsAlert(false);
         navigate("/dashboard");
-      }, 2000);
-      setIsAlert(true);
+      }, 1000);
     } catch (error) {
-      console.log(error.message);
-      setAlertMessage("Invalid Login Credentials");
+      setAlertMessage(error.message);
       setAlertType("error");
       setIsAlert(true);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -155,13 +155,14 @@ function Signup() {
                 color: "black",
                 fontWeight: "bold",
               }}
+              disabled={isLoading}
             >
               {isLoading ? (
-                <p>Login</p>
-              ) : (
                 <div className="h-full w-full flex justify-center items-center">
                   <span className="loading loading-spinner loading-md"></span>
                 </div>
+              ) : (
+                <p>Sign Up</p>
               )}
             </Button>
           </div>
