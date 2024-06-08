@@ -7,14 +7,14 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 const FirebaseContext = createContext(null);
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD5w9__r6FHfKNGdRYYFOfwCNEhSxwtKfY",
-  authDomain: "edai2-98b68.firebaseapp.com",
-  databaseURL: "https://edai2-98b68-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "edai2-98b68",
-  storageBucket: "edai2-98b68.appspot.com",
-  messagingSenderId: "318565585968",
-  appId: "1:318565585968:web:a286f2503c24918b3fc9f5",
-  measurementId: "G-VCQH2BTQFL",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -37,13 +37,13 @@ export const FirebaseProvider = ({ children }) => {
     const [farmDocs, cashCropsDocs, indoorsDocs] = await Promise.all([
       getDocs(farmSubCollection),
       getDocs(cashCropsSubCollection),
-      getDocs(indoorsSubCollection)
+      getDocs(indoorsSubCollection),
     ]);
 
     return {
       farm: farmDocs.docs,
       cashCrops: cashCropsDocs.docs,
-      indoor: indoorsDocs.docs
+      indoor: indoorsDocs.docs,
     };
   };
 
