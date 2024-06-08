@@ -10,6 +10,7 @@ function Login() {
   const [isAlert, setIsAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [isLoading, setisLoading] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ function Login() {
       setAlertMessage("User Login Successful");
       setAlertType("success");
       setIsAlert(true);
+      setisLoading(false);
     } catch (error) {
       console.log(error.message);
       setAlertMessage("Invalid Login Credentials");
@@ -102,7 +104,13 @@ function Login() {
                 fontWeight: "bold",
               }}
             >
-              Login
+              {isLoading ? (
+                <p>Login</p>
+              ) : (
+                <div className="h-full w-full flex justify-center items-center">
+                  <span className="loading loading-spinner loading-md"></span>
+                </div>
+              )}
             </Button>
           </div>
 

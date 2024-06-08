@@ -12,10 +12,12 @@ import MainFrame from "./components/MainFrame";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [isloading, setIsloading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      setIsloading(false);
     });
     return () => unsubscribe();
   }, []);

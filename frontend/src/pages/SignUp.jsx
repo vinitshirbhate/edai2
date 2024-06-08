@@ -13,6 +13,7 @@ function Signup() {
   const [isAlert, setIsAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const handleRegister = async (e) => {
@@ -21,6 +22,7 @@ function Signup() {
       setAlertMessage("Passwords do not match");
       setAlertType("error");
       setIsAlert(true);
+      setIsLoading(false);
       return;
     }
     try {
@@ -154,7 +156,13 @@ function Signup() {
                 fontWeight: "bold",
               }}
             >
-              Sign Up
+              {isLoading ? (
+                <p>Login</p>
+              ) : (
+                <div className="h-full w-full flex justify-center items-center">
+                  <span className="loading loading-spinner loading-md"></span>
+                </div>
+              )}
             </Button>
           </div>
           {isAlert && (
