@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { Alert, Button, TextField } from "@mui/material";
 
@@ -10,25 +10,26 @@ function Login() {
   const [isAlert, setIsAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Set to false initially
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading state to true on form submit
+    setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User Logged In Successfully");
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
       setAlertMessage("User Login Successful");
       setAlertType("success");
       setIsAlert(true);
-      setIsLoading(false); // Set loading state to false after successful login
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
       setAlertMessage("Invalid Login Credentials");
       setAlertType("error");
       setIsAlert(true);
-      setIsLoading(false); // Set loading state to false after error
+      setIsLoading(false);
     }
   };
 
