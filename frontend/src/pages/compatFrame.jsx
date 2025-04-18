@@ -88,7 +88,7 @@ const CompatFrame = () => {
     console.log("No data");
     return (
       <div className="flex flex-col justify-center items-center bg-teal-500 h-full">
-        <img src="../../assets/WeatherIcons.gif" alt=" Loading..." />
+        <img src="../../assets/WeatherIcons.gif" alt="Loading..." />
         <p className="text-3xl font-extrabold text-teal-900 flex flex-row gap-2">
           Fetching Your Data From The Cloud
           <span className="loading loading-dots loading-lg"></span>
@@ -97,13 +97,24 @@ const CompatFrame = () => {
     );
   }
 
-  // Get the latest data entry
-  const latestData = espData[espData.length - 1]; // Since the array is reversed, the first entry is the latest
+  // Calculate average data
+  const calculateAverage = (data, key) => {
+    const sum = data.reduce((acc, entry) => acc + parseFloat(entry[key]), 0);
+    return (sum / data.length).toFixed(2);
+  };
 
-  console.log("Latest data in MainFrame:", latestData); // Debugging statement
-  const { temperature, humidity, soilMoisture } = latestData || {};
-  const calculateMoisture = soilMoisture
-    ? (((1024 - soilMoisture) / 1024) * 100).toFixed(2)
+  const averageTemperature = calculateAverage(espData, 'temperature');
+  const averageHumidity = calculateAverage(espData, 'humidity');
+  const averageSoilMoisture = calculateAverage(espData, 'soilMoisture');
+
+  console.log("Average data in MainFrame:", {
+    temperature: averageTemperature,
+    humidity: averageHumidity,
+    soilMoisture: averageSoilMoisture,
+  });
+
+  const calculateMoisture = averageSoilMoisture
+    ? (((1024 - averageSoilMoisture) / 1024) * 100).toFixed(2)
     : null;
 
   const filterSuitableCrops = () => {
@@ -123,10 +134,10 @@ const CompatFrame = () => {
           data.fhumidity !== undefined &&
           data.isoilmoisture !== undefined &&
           data.fsoilmoisture !== undefined &&
-          data.itemp <= temperature &&
-          data.ftemp >= temperature &&
-          data.ihumidity <= humidity &&
-          data.fhumidity >= humidity &&
+          data.itemp <= averageTemperature &&
+          data.ftemp >= averageTemperature &&
+          data.ihumidity <= averageHumidity &&
+          data.fhumidity >= averageHumidity &&
           data.isoilmoisture <= calculateMoisture &&
           data.fsoilmoisture >= calculateMoisture
         ) {
@@ -155,7 +166,7 @@ const CompatFrame = () => {
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue value={temperature} unit="°C" />
+              <SensorValue value={averageTemperature} unit="°C" />
             </div>
             <div className="text-xl font-semibold mt-2">Temperature</div>
           </div>
@@ -177,7 +188,7 @@ const CompatFrame = () => {
               className="h-16 w-16"
             />
             <div className="text-4xl font-bold">
-              <SensorValue value={humidity} unit="%" />
+              <SensorValue value={averageHumidity} unit="%" />
             </div>
             <div className="text-xl font-semibold mt-2">Humidity</div>
           </div>
