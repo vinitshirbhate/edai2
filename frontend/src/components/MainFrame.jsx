@@ -10,7 +10,7 @@ const MainFrame = () => {
     console.log("No data");
     return (
       <div className="flex flex-col justify-center items-center bg-teal-500 h-full">
-        <img src="../../assets/WeatherIcons.gif" alt=" Loading..." />
+        <img src="../../assets/WeatherIcons.gif" alt="Loading..." />
         <p className="text-3xl font-extrabold text-teal-900 flex flex-row gap-2">
           Fetching Your Data From The Cloud
           <span className="loading loading-dots loading-lg"></span>
@@ -51,6 +51,12 @@ const MainFrame = () => {
     fetchLocation();
   }, []);
 
+  // Transform soil moisture data
+  const transformedEspData = espData.map((entry) => ({
+    ...entry,
+    soilMoisture: (((1024 - entry.soilMoisture) / 1024) * 100).toFixed(2),
+  }));
+
   return (
     <>
       <div className="px-6">
@@ -64,8 +70,8 @@ const MainFrame = () => {
             </p>
             <img
               src="../../assets/WeatherIcons.gif"
-              alt=" Loading..."
-              className=" w-36 h-36"
+              alt="Loading..."
+              className="w-36 h-36"
             />
           </div>
         )}
@@ -111,6 +117,7 @@ const MainFrame = () => {
         <div className="rounded-md shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <GridItem title="Temperature">
             <AreaChartComponent
+              data={espData}
               dataKey="temperature"
               stroke="#FF0000"
               fill="#FF8888"
@@ -121,6 +128,7 @@ const MainFrame = () => {
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <GridItem title="Soil Moisture">
             <AreaChartComponent
+              data={transformedEspData}
               dataKey="soilMoisture"
               stroke="#0000FF"
               fill="#8888FF"
@@ -131,6 +139,7 @@ const MainFrame = () => {
         <div className="rounded-md min-h-[100px] shadow-lg border-stone-700 border-2 text-black flex flex-col place-items-center justify-center bg-teal-50">
           <GridItem title="Humidity">
             <AreaChartComponent
+              data={espData}
               dataKey="humidity"
               stroke="#00FF00"
               fill="#88FF88"

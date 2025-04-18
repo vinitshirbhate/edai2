@@ -8,18 +8,15 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import { useEspData } from "../pages/EspDataContext";
 
-export const AreaChartComponent = ({ dataKey, stroke, fill }) => {
-  const espData = useEspData();
-
-  if (!espData || espData.length === 0) {
+export const AreaChartComponent = ({ data, dataKey, stroke, fill }) => {
+  if (!data || data.length === 0) {
     return <div>No data available</div>;
   }
 
   return (
     <ResponsiveContainer width="100%" height={200}>
-      <AreaChart width={500} height={400} data={espData}>
+      <AreaChart width={500} height={400} data={data}>
         <CartesianGrid strokeDasharray="5 5" />
         <XAxis dataKey="name" />
         <YAxis />
