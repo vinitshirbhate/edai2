@@ -19,7 +19,12 @@ const ModalComp = ({ open, setOpen, suitableCrops }) => {
           {farm.length > 0 ? (
             <div className="flex overflow-x-auto space-x-4 scrollbar-hide">
               {farm.map((crop) => (
-                <BookCard key={crop.id} name={crop.id} {...crop.data()} />
+                <BookCard
+                  key={crop.id}
+                  name={crop.id}
+                  {...crop.data()}
+                  showSuggestionButton={true}
+                />
               ))}
             </div>
           ) : (
@@ -31,7 +36,12 @@ const ModalComp = ({ open, setOpen, suitableCrops }) => {
           {cashCrops.length > 0 ? (
             <div className="flex overflow-x-auto space-x-4 scrollbar-hide">
               {cashCrops.map((crop) => (
-                <BookCard key={crop.id} name={crop.id} {...crop.data()} />
+                <BookCard
+                  key={crop.id}
+                  name={crop.id}
+                  {...crop.data()}
+                  showSuggestionButton={true}
+                />
               ))}
             </div>
           ) : (
@@ -43,7 +53,12 @@ const ModalComp = ({ open, setOpen, suitableCrops }) => {
           {indoor.length > 0 ? (
             <div className="flex overflow-x-auto space-x-4 scrollbar-hide">
               {indoor.map((crop) => (
-                <BookCard key={crop.id} name={crop.id} {...crop.data()} />
+                <BookCard
+                  key={crop.id}
+                  name={crop.id}
+                  {...crop.data()}
+                  showSuggestionButton={true}
+                />
               ))}
             </div>
           ) : (
